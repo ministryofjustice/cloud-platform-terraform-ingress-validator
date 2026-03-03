@@ -277,10 +277,6 @@ resource "kubernetes_config_map" "fluent-bit-config" {
     EOT
   }
 
-  depends_on = [
-    module.s3_bucket_modsec_logs
-  ]
-
   lifecycle {
     ignore_changes = [metadata[0].annotations]
   }
