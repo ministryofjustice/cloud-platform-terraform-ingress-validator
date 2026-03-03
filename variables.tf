@@ -18,16 +18,6 @@ variable "live1_cert_dns_name" {
   default     = ""
 }
 
-variable "backend_repo" {
-  description = "repository for the default backend app"
-  default     = "ministryofjustice/cloud-platform-custom-error-pages"
-}
-
-variable "backend_tag" {
-  description = "tag of the default backend app"
-  default     = "1.1.5"
-}
-
 variable "replica_count" {
   type        = string
   description = "Number of replicas set in deployment"
@@ -36,12 +26,6 @@ variable "replica_count" {
 variable "controller_name" {
   type        = string
   description = "Will be used as the ingress controller name and the class annotation"
-}
-
-variable "default_cert" {
-  type        = string
-  description = "Useful if you want to use a default certificate for your ingress controller. Format: namespace/secretName"
-  default     = "ingress-controllers/default-certificate"
 }
 
 variable "enable_modsec" {
