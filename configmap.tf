@@ -2,7 +2,7 @@ resource "kubernetes_config_map" "fluent-bit-config-validator" {
   count = var.enable_modsec ? 1 : 0
 
   metadata {
-    name      = var.is_non_prod_modsec ? "fluent-bit-config-${var.controller_name}" : "fluent-bit-config"
+    name      = var.is_non_prod_modsec ? "fluent-bit-config-validator-${var.controller_name}" : "fluent-bit-config-validator"
     namespace = "ingress-controllers"
     labels = {
       "k8s-app" = var.controller_name
@@ -282,11 +282,11 @@ resource "kubernetes_config_map" "fluent-bit-config-validator" {
   }
 }
 
-resource "kubernetes_config_map" "fluent_bit_lua_script" {
+resource "kubernetes_config_map" "fluent_bit_lua_script_validator" {
   count = var.enable_modsec ? 1 : 0
 
   metadata {
-    name      = var.is_non_prod_modsec ? "fluent-bit-luascripts-${var.controller_name}" : "fluent-bit-luascripts"
+    name      = var.is_non_prod_modsec ? "fluent-bit-luascripts-validator-${var.controller_name}" : "fluent-bit-luascripts-validator"
     namespace = "ingress-controllers"
     labels = {
       "k8s-app" = var.controller_name
@@ -331,12 +331,12 @@ resource "kubernetes_config_map" "fluent_bit_lua_script" {
   }
 }
 
-resource "kubernetes_config_map" "modsecurity_nginx_config" {
+resource "kubernetes_config_map" "modsecurity_nginx_config_validator" {
   count = var.enable_modsec ? 1 : 0
 
   metadata {
 
-    name      = var.is_non_prod_modsec ? "modsecurity-nginx-config-${var.controller_name}" : "modsecurity-nginx-config"
+    name      = var.is_non_prod_modsec ? "modsecurity-nginx-config-validator-${var.controller_name}" : "modsecurity-nginx-config-validator"
     namespace = "ingress-controllers"
     labels = {
       "k8s-app" = var.controller_name
@@ -352,12 +352,12 @@ resource "kubernetes_config_map" "modsecurity_nginx_config" {
 }
 
 
-resource "kubernetes_config_map" "logrotate_config" {
+resource "kubernetes_config_map" "logrotate_config_validator" {
   count = var.enable_modsec ? 1 : 0
 
   metadata {
 
-    name      = var.is_non_prod_modsec ? "logrotate-config-${var.controller_name}" : "logrotate-config"
+    name      = var.is_non_prod_modsec ? "logrotate-config-validator-${var.controller_name}" : "logrotate-config-validator"
     namespace = "ingress-controllers"
     labels = {
       "k8s-app" = var.controller_name
