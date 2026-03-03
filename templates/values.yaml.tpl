@@ -3,7 +3,8 @@ controller:
 ## enableAnnotationValidations defaults to false in 4.10.4, however bringing into template for future ref
   enableAnnotationValidations: false
   image:
-    registry: xxx.dkr.ecr.eu-west-2.amazonaws.com/team/reg
+    registry: xxx.dkr.ecr.eu-west-2.amazonaws.com
+    image: team/registry
     tag: ingress-nginx-validator-1.14.3
     digest: abcd
     chroot: false
