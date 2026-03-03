@@ -269,11 +269,6 @@ controller:
 ## This is a validating ingress controller, so we don't want a Service created.
   service:
     enabled: false
-
-%{ if default_cert != "" }
-  extraArgs:
-    default-ssl-certificate: ${default_cert}
-%{~ endif ~}
   
   admissionWebhooks:
     enabled: true
