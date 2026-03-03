@@ -35,14 +35,14 @@ resource "helm_release" "nginx_ingress_validator" {
     memory_requests             = var.memory_requests
     memory_limits               = var.memory_limits
     fluent_bit_version          = var.fluent_bit_version
-    modsec_nginx_cm_config_name = var.is_non_prod_modsec ? "modsecurity-nginx-config-${var.controller_name}" : "modsecurity-nginx-config"
-    fluent_bit_config_name      = var.is_non_prod_modsec ? "fluent-bit-config-modsec-non-prod" : "fluent-bit-config"
+    modsec_nginx_cm_config_name = var.is_non_prod_modsec ? "modsecurity-nginx-config-validator-${var.controller_name}" : "modsecurity-nginx-config-validator"
+    fluent_bit_config_name      = var.is_non_prod_modsec ? "fluent-bit-config-validator-modsec-non-prod" : "fluent-bit-config-validator"
     default_tags                = local.tags
     internal_load_balancer      = var.internal_load_balancer
   })]
 
   depends_on = [
-    kubernetes_config_map.modsecurity_nginx_config,
+    kubernetes_config_map.modsecurity_nginx_config_validator,
   ]
 
   lifecycle {

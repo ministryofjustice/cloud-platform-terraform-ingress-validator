@@ -1,4 +1,4 @@
-resource "kubernetes_config_map" "fluent-bit-config" {
+resource "kubernetes_config_map" "fluent-bit-config-validator" {
   count = var.enable_modsec ? 1 : 0
 
   metadata {
