@@ -187,7 +187,6 @@ controller:
     proxy-buffer-size: "16k"
     proxy-body-size: "50m"
     keepalive: ${keepalive}
-    proxy-buffering: "${proxy_response_buffering}"
     upstream-keepalive-time: "${upstream_keepalive_time}"
     annotations-risk-level: "Critical"
 
