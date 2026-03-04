@@ -18,27 +18,23 @@ resource "helm_release" "nginx_ingress_validator" {
   version    = "4.14.3"
 
   values = [templatefile("${path.module}/templates/values.yaml.tpl", {
-    metrics_namespace    = "ingress-controllers"
-    replica_count        = var.replica_count
-    controller_name      = var.controller_name
-    controller_value     = "k8s.io/ingress-${var.controller_name}"
-    enable_modsec        = var.enable_modsec
-    enable_latest_tls    = var.enable_latest_tls
-    enable_owasp         = var.enable_owasp
-    enable_anti_affinity = var.enable_anti_affinity
-    keepalive            = var.keepalive
-    # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#upstream-keepalive-time
-    upstream_keepalive_time = var.upstream_keepalive_time
-    # https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#cross-zone-load-balancing
+    metrics_namespace           = "ingress-controllers"
+    replica_count               = var.replica_count
+    controller_name             = var.controller_name
+    controller_value            = "k8s.io/ingress-${var.controller_name}"
+    enable_modsec               = var.enable_modsec
+    enable_owasp                = var.enable_owasp
+    enable_anti_affinity        = var.enable_anti_affinity
     default                     = var.controller_name == "default" ? true : false
     name_override               = "ingress-${var.controller_name}-validator"
     memory_requests             = var.memory_requests
     memory_limits               = var.memory_limits
-    fluent_bit_version          = var.fluent_bit_version
-    modsec_nginx_cm_config_name = var.is_non_prod_modsec ? "modsecurity-nginx-config-validator-${var.controller_name}" : "modsecurity-nginx-config-validator"
-    fluent_bit_config_name      = var.is_non_prod_modsec ? "fluent-bit-config-validator-modsec-non-prod" : "fluent-bit-config-validator"
+    modsec_nginx_cm_config_name = "modsecurity-nginx-config-validator"
     default_tags                = local.tags
-    internal_load_balancer      = var.internal_load_balancer
+    validator_registry          = var.validator_registry
+    validator_image             = var.validator_image
+    validator_tag               = var.validator_tag
+    validator_digest            = var.validator_digest
   })]
 
   depends_on = [

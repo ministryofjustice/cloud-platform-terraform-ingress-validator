@@ -2,16 +2,20 @@ provider "aws" {
   region = "eu-west-2"
 }
 
-module "template" {
+module "ingress_validator" {
   source = "../"
-  # source = "github.com/ministryofjustice/cloud-platform-terraform-template?ref=version" # use the latest release
 
-  # Tags
-  business_unit          = var.business_unit
-  application            = var.application
-  is_production          = var.is_production
-  team_name              = var.team_name
-  namespace              = var.namespace
-  environment_name       = var.environment_name
-  infrastructure_support = var.infrastructure_support
+  replica_count        = "3"
+  controller_name      = "default"
+  enable_anti_affinity = true
+  enable_modsec        = true
+  enable_owasp         = true
+  memory_requests      = "512Mi"
+  memory_limits        = "2Gi"
+  cluster              = "my-eks-cluster"
+  validator_registry   = "1234.dkr.ecr.eu-west-2.amazonaws.com"
+  validator_image      = "team/reg"
+  validator_tag        = "tag"
+  validator_digest     = "sha256:blah"
+
 }
