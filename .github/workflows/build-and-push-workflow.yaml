@@ -2,7 +2,7 @@ name: build-and-push-workflow
 
 on:
   push:
-    branches: [main]
+    branches: [main, ingress-validator]
 
 jobs:
   ecr:
