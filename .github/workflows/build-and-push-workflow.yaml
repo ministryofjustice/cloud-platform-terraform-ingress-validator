@@ -1,69 +1,27 @@
-name: Build and Push
+name: build-and-push-workflow
 
 on:
-  workflow_call:
-    inputs:
-      env:
-        description: 'which environment to deploy to'
-        required: true
-        type: string
-      image_tag:
-        description: 'what to tag the image with'
-        type: string
-      ecr_repo:
-        description: 'name of the ecr repo'
-        required: true
-        type: string
-      aws_region:
-        description: 'region of the ecr repo'
-        type: string
-        required: true
-    secrets:
-      ecr_role_to_assume:
-        description: 'ecr role to assume in aws'
-        required: true
-    # Map the workflow outputs to job outputs
-    outputs:
-      REGISTRY:
-        description: "The ecr registry"
-        value: ${{ jobs.build-and-push.outputs.registry }}
+  push:
+    branches: [main]
 
 jobs:
-  build-and-push:
-    name: Build container, push to ECR and deploy to the cluster
-    environment: ${{ inputs.env }}
+  ecr:
     runs-on: ubuntu-latest
     permissions:
       id-token: write # This is required for requesting the JWT
-      contents: read  # This is required for actions/checkout
-    outputs:
-      IMAGE_TAG: ${{ steps.build-image.outputs.IMAGE_TAG }}
-      REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      contents: read # This is required for actions/checkout
     steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 #v4.0.2
         with:
-          role-to-assume: ${{ secrets.ecr_role_to_assume }}
-          aws-region: ${{ inputs.aws_region }}
-
-      - uses: aws-actions/amazon-ecr-login@v2
+          role-to-assume: ${{ secrets.ECR_ROLE_TO_ASSUME }}
+          aws-region: ${{ vars.ECR_REGION }}
+      - uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 #v2.0.1
         id: login-ecr
-
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
+      - run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
         env:
-          ECR_REPO: ${{ inputs.ecr_repo }}
-          IMAGE_TAG: ${{ inputs.image_tag }}
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: |
-          docker build -t $REGISTRY/$ECR_REPO:$IMAGE_TAG .
-          docker push $REGISTRY/$ECR_REPO:$IMAGE_TAG
+          REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
