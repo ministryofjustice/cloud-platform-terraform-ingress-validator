@@ -53,6 +53,12 @@ controller:
   # Overrides value for --watch-ingress-without-class flag of the controller binary
   # Defaults to false
   watchIngressWithoutClass: false
+
+  # -- Disable ingress status updates since this is a validator only.
+  # Without this, the validator overwrites ingress status with pod IPs
+  # instead of the production controller's NLB address.
+  extraArgs:
+    update-status: "false"
   # -- Process IngressClass per name (additionally as per spec.controller).
   ingressClassByName: ${default}
 
