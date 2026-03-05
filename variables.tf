@@ -40,4 +40,4 @@ variable "environment_name" {
 variable "infrastructure_support" {
   description = "The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>)"
   type        = string
-}
+} 
